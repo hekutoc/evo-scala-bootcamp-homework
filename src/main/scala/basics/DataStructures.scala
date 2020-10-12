@@ -7,4 +7,7 @@ object DataStructures {
     .foldLeft(Map[Set[T], Int]())((acc, el) => acc + (el._2.toSet -> el._1))
     .toList
     .sortBy(_._2)
+
+
+  // .foldLeft(Map[Set[T], Int]())((acc, el) => acc + (el._2.toSet -> el._1))
 }
