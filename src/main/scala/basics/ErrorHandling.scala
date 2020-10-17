@@ -98,7 +98,7 @@ object ErrorHandling {
         def validMonth(string: String): AllErrorsOr[String] = ValidationUtils.validNum(string, 1, 12, ExpirationMonthNotValid)
         def validYear(string: String): AllErrorsOr[String] = ValidationUtils.validNum(string, 0, 99, ExpirationYearNotValid)
 
-        val dateRegex = raw"(\d{2})/(\d{2})".r
+        val dateRegex = raw"(\\d{2})/(\\d{2})".r
         val err = ExpirationFormatNotValid
         date match {
           case dateRegex(month, year) =>
