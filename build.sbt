@@ -1,6 +1,4 @@
-import com.typesafe.sbt.packager.docker.{Cmd, ExecCmd}
-
-name := "scala-bootcamp-containers"
+name := "scala-bootcamp"
 
 version := "0.1"
 
@@ -21,6 +19,13 @@ val logbackVersion = "1.2.3"
 val pureconfigVersion = "0.14.0"
 val redisClientVersion = "3.30"
 val scalatestVersion = "3.2.3"
+
+libraryDependencies ++= Seq(
+  "jakarta.mail" % "jakarta.mail-api" % jakartaMailVersion,
+  "com.sun.mail" % "jakarta.mail" % jakartaMailVersion,
+  "net.debasishg" %% "redisclient" % redisClientVersion,
+  "org.scalatest" %% "scalatest" % scalatestVersion % Test
+)
 
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
 
