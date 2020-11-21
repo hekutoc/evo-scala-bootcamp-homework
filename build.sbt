@@ -25,6 +25,7 @@ val akkaHttpCirceVersion = "1.31.0"
 
 val log4CatsVersion = "1.1.1"
 
+
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "org.http4s" %% "http4s-dsl" % http4sVersion,
