@@ -4,14 +4,7 @@ import akka.actor._
 
 object BinaryTreeSet {
 
-  sealed trait Operation {
-    def requester: ActorRef
-
-    def id: Int
-
-    def elem: Int
-  }
-
+  sealed trait Operation
   // requests with identifier `id`
   // `requester` should be notified when an operation is completed.
   object Operation {
@@ -25,6 +18,8 @@ object BinaryTreeSet {
     // remove the element `elem` from the tree
     final case class Remove(requester: ActorRef, id: Int, elem: Int) extends Operation
 
+    final case class ReplaceMe(elem: ActorRef, by: Option[ActorRef]) extends Operation
+    final case class AppendRight(node: ActorRef) extends Operation
   }
 
   sealed trait OperationReply {
@@ -54,5 +49,5 @@ final class BinaryTreeSet extends Actor {
     case m: Operation => root ! m
   }
 
-  private def createRoot: ActorRef = context.actorOf(BinaryTreeNode.props(0, initiallyRemoved = true))
+  private def createRoot: ActorRef = context.actorOf(BinaryTreeNode.props(0))
 }

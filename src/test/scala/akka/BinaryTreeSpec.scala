@@ -22,8 +22,13 @@ class BinaryTreeSpec extends AnyFlatSpec {
     insertsAndSearch()
   }
 
+  "BinaryTreeSpec" should "handle intermediate parent removal" in new Scope  {
+    deleteInterNode()
+  }
+
+
   class Scope
-      extends TestKit(ActorSystem("BinaryTreeSuite"))
+    extends TestKit(ActorSystem("BinaryTreeSuite"))
       with ImplicitSender {
     def correctReplies(): Unit = {
       val requester = TestProbe()
@@ -63,6 +68,30 @@ class BinaryTreeSpec extends AnyFlatSpec {
       ()
     }
 
+    def deleteInterNode(): Unit = {
+
+      val topNode = system.actorOf(Props[BinaryTreeSet]())
+
+      topNode ! Insert(testActor, id = 101, 1)
+      topNode ! Insert(testActor, id = 102, 2)
+      topNode ! Insert(testActor, id = 103, 3)
+      expectMsg(OperationFinished(101))
+      expectMsg(OperationFinished(102))
+      expectMsg(OperationFinished(103))
+
+      topNode ! Contains(testActor, id = 104, 3)
+      expectMsg(ContainsResult(104, true))
+
+      topNode ! Remove(testActor, id = 105, 2)
+      expectMsg(OperationFinished(105))
+
+      topNode ! Contains(testActor, id = 106, 2)
+      expectMsg(ContainsResult(106, false))
+
+      topNode ! Contains(testActor, id = 107, 3)
+      expectMsg(ContainsResult(107, true))
+    }
+
     def verify(probe: TestProbe,
                ops: Seq[Operation],
                expected: Seq[OperationReply]): Unit = {
@@ -98,7 +127,7 @@ class BinaryTreeSpec extends AnyFlatSpec {
         if (replies != expectedReplies) {
           val pairs = (replies zip expectedReplies).zipWithIndex filter (
             x => x._1._1 != x._1._2
-          )
+            )
           fail(
             "unexpected replies:" + pairs
               .map(
@@ -109,4 +138,5 @@ class BinaryTreeSpec extends AnyFlatSpec {
         }
       }
   }
+
 }
